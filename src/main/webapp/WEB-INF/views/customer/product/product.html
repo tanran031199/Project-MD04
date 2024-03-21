@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Mirrored from html.kutethemes.com/leka/html/shop-left-sidebar.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Dec 2023 01:52:57 GMT -->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8">
+    <title>Leka - Shop Left Sidebar</title>
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/chosen.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/superslides.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/jquery.mCustomScrollbar.css}">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Crimson+Text:400,400italic,600,600italic,700,700italic'
+          rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+<body class="">
+<header class="header">
+    <div class="top-header">
+        <div class="container">
+            <div class="top-header-menu">
+                <a href="#"><i class="fa fa-phone"></i> +84 868.8568</a>
+                <a href="#"><i class="fa fa-clock-o"></i> T2 - T7: 08:00 - 17:00</a>
+                <a href="#"><i class="fa fa-envelope-o"></i> Support@example.com</a>
+            </div>
+            <div class="top-header-right">
+                <ul th:if="${session.customer == null}">
+                    <li><a href="/login"><i class="fa fa-key"></i> ĐĂNG NHẬP</a></li>
+                    <li><a href="/register"><i class="fa fa-user"></i> ĐĂNG KÝ</a></li>
+                </ul>
+
+                <ul th:unless="${session.customer == null}">
+                    <li><a href=""><i class="fa fa-user"></i> <span th:text="${session.customer.userName}"></span></a>
+                    </li>
+                    <li><a href="/logout"> ĐĂNG XUẤT</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-header">
+        <div class="container main-header-inner">
+            <div id="form-search" class="form-search">
+                <form>
+                    <input type="text" placeholder="YOU CAN SEARCH HERE..."/>
+                    <button class="btn-search"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="logo">
+                        <a href="index.html"><img th:src="@{/assets/images/logo.png}" alt=""/></a>
+                    </div>
+                </div>
+                <div class="col-sm-10 main-menu-wapper">
+                    <a href="#" class="mobile-navigation"><i class="fa fa-bars"></i></a>
+                    <nav id="main-menu" class="main-menu">
+                        <ul class="navigation">
+                            <li class="menu-item-has-children">
+                                <a href="/">TRANG CHỦ</a>
+                            </li>
+                            <li class="menu-item-has-children item-mega-menu">
+                                <a href="/product">SẢN PHẨM</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-sm-2">
+                    <!-- Icon search -->
+                    <div class="icon-search">
+                        <span class="icon"><i class="fa fa-search"></i></span>
+                    </div>
+
+                    <div class="mini-cart" xmlns:th="http://www.thymeleaf.org">
+                        <a th:if="${session.cartItemList != null}" class="icon" href="#">Cart <span class="count"
+                                                                                                    th:text="${session.cartItemList.size()}"></span></a>
+                        <a th:unless="${session.cartItemList != null}" class="icon" href="#">Cart <span
+                                class="count">0</span></a>
+
+                        <div th:if="${session.cartItemList != null}" class="mini-cart-content">
+                            <ul th:if="${!session.cartItemList.isEmpty()}" class="list-cart-product">
+                                <li th:each="cartItem : ${session.cartItemList}">
+
+                                    <div class="product-thumb">
+                                        <a href="#"><img
+                                                th:src="@{|../../../upload/${cartItem.product.images.get(0).fileName}|}"
+                                                alt=""/></a>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#"
+                                                                    th:text="${cartItem.product.productName}"></a></h5>
+                                        <span class="price"
+                                              th:text="${#numbers.formatDecimal(cartItem.unitPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                                        <span class="qty" th:text="'Qty: ' + ${cartItem.quantity}"></span>
+                                        <a th:href="@{/product-remove-cart-item/{id}(id=${cartItem.cartItemId})}"
+                                           class="remove">remove</a>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <ul th:unless="${!session.cartItemList.isEmpty()}" class="list-cart-product">
+                                <li>
+                                    <p style="text-align: center; margin-top: 25px;">Chưa có sản phẩm nào trong giỏ hàng
+                                        của bạn</p>
+                                </li>
+                            </ul>
+
+                            <p class="sub-toal-wapper">
+                                <span>SUBTOTAL</span>
+                                <span class="sub-toal"
+                                      th:text="${#numbers.formatDecimal(session.allTotalPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                            </p>
+                            <a href="/cart" class="btn-view-cart">ĐI TỚI GIỎ HÀNG</a>
+                            <a href="#" class="btn-check-out">THANH TOÁN</a>
+                        </div>
+
+
+                        <div th:unless="${session.cartItemList != null}" class="mini-cart-content">
+                            <ul class="list-cart-product">
+                                <li>
+                                    <p style="text-align: center; margin-top: 25px;">Chưa có sản phẩm nào trong giỏ hàng
+                                        của bạn</p>
+                                </li>
+                            </ul>
+
+                            <p class="sub-toal-wapper">
+                                <span>SUBTOTAL</span>
+                                <span class="sub-toal">0vnđ</span>
+                            </p>
+                            <a href="/cart" class="btn-view-cart">ĐI TỚI GIỎ HÀNG</a>
+                            <a href="#" class="btn-check-out">THANH TOÁN</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="banner bg-parallax">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="banner-content text-center">
+            <h2 class="page-title">SẢN PHẨM</h2>
+            <div class="breadcrumbs">
+                <a href="#">TRANG CHỦ</a>
+                <a href="#">SẢN PHẨM</a>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="maincontainer left-sidebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-md-9 main-content">
+                <!-- Sortbar -->
+                <div class="sortBar">
+                    <div class="sortBar-left">
+                        <form class="ordering">
+                            <select>
+                                <option value="">SHORT BY</option>
+                                <option value="">Sort by popularity</option>
+                                <option value="">Sort by average rating</option>
+                                <option value="">Sort by price: low to high</option>
+                            </select>
+                            <select>
+                                <option value="">Postion</option>
+                                <option value="">Sort by popularity</option>
+                                <option value="">Sort by average rating</option>
+                                <option value="">Sort by price: low to high</option>
+                            </select>
+                        </form>
+                        <div class="display-product-option">
+                            <a href="#" class="view-as-grid selected"><i class="fa fa-th-large"></i></a>
+                            <a href="#" class="view-as-list"><i class="fa fa-th-list"></i></a>
+                        </div>
+                    </div>
+                    <div class="sortBar-right">
+                        <div class="result-count">
+                            SHOW ITEMS 1 to 12 of 36 total
+                        </div>
+                    </div>
+                </div>
+                <!-- ./ SortBar -->
+                <!-- List products -->
+                <ul class="products row">
+                    <li th:if="${!products.isEmpty()}" th:each="product : ${products}"
+                        class="product col-sm-6 col-md-4">
+                        <div class="product-thumb">
+                            <a>
+                                <img th:src="@{|upload/${product.images.get(0).fileName}|}" alt="">
+                            </a>
+                        </div>
+
+                        <div class="product-info">
+                            <h3><a href="#" th:text="${product.productName}"></a></h3>
+                            <span class="product-price"
+                                  th:text="${#numbers.formatDecimal(product.exportPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                            <span class="product-price">SỐ LƯỢNG: <span th:text="${product.stock}"></span></span>
+                            <a th:href="@{/product-add-to-cart(productId = ${product.productId}, quantity = 1)}"
+                               class="button-add-to-cart">THÊM VÀO GIỎ HÀNG</a>
+                        </div>
+                    </li>
+
+                    <li style="margin-top: 66px; text-align: center; font-size: 30px; font-weight: 900;"
+                        th:unless="${!products.isEmpty()}" class="product col-sm-12 col-md-12">
+                        <p>Chưa có sản phẩm nào trong mục này</p>
+                    </li>
+                </ul>
+
+                <nav class="pagination">
+                    <ul>
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">Next</a></li>
+                    </ul>
+                </nav>
+                <!-- ./ List Products -->
+            </div>
+            <!-- Sliderbar -->
+            <div class="col-sm-4 col-md-3 sidebar">
+                <!-- Product category -->
+                <div class="widget widget_product_categories">
+                    <h2 class="widget-title">Danh mục</h2>
+                    <ul class="product-categories">
+                        <li><a href="/product">tất cả sản phẩm</a></li>
+                        <li th:cate-id="${cateEntry.key.categoryId}"
+                            th:each="cateEntry : ${categoryHierarchy.entrySet()}" class="cat-parent">
+                            <a class="parent-drop" href="#" th:text="${cateEntry.key.categoryName}">
+                                <!--                                <a th:href="@{/product(cid=${cateEntry.key.categoryId})}"></a>-->
+                            </a>
+                            <ul th:each="subcate : ${cateEntry.value}" class="children">
+                                <li class="children-cate"><a th:href="@{/product(cid=${subcate.categoryId})}"
+                                                             th:text="${subcate.categoryName}"></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#"><img th:src="@{/assets/images/logo-footer.png}" alt=""></a>
+            </div>
+            <div class="col-sm-4">
+                <div class="widget">
+                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                    classical Latin literature from 45 BC, making it over
+                </div>
+                <div class="widget widget-social">
+                    <div class="list-social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-google-plus"></i></a>
+                        <a href="#"><i class="fa fa-skype"></i></a>
+                        <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="widget widget-newaletter">
+                    <form>
+                        <input type="text" class="newaletter-email" placeholder="EMAIL FOR NEWSLETTER">
+                        <span><button type="submit" class="newaletter-button"><i class="fa fa-envelope-o"></i></button></span>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">COMPANY</h3>
+                    <ul>
+                        <li><a href="#">ABOUT US</a></li>
+                        <li><a href="#">OFFICES</a></li>
+                        <li><a href="#">STORES</a></li>
+                        <li><a href="#">WORK WITH US</a></li>
+                        <li><a href="#">CONTACT</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">SHOPPING GUIDE</h3>
+                    <ul>
+                        <li><a href="#">HOW TO BUY</a></li>
+                        <li><a href="#">INFOMATION</a></li>
+                        <li><a href="#">PAYMENT</a></li>
+                        <li><a href="#">SHIPPING</a></li>
+                        <li><a href="#">EXCHANGES</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">COMPANY</h3>
+                    <ul>
+                        <li><a href="#">ABOUT US</a></li>
+                        <li><a href="#">OFFICES</a></li>
+                        <li><a href="#">STORES</a></li>
+                        <li><a href="#">WORK WITH US</a></li>
+                        <li><a href="#">CONTACT</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">SHOPPING GUIDE</h3>
+                    <ul>
+                        <li><a href="#">HOW TO BUY</a></li>
+                        <li><a href="#">INFOMATION</a></li>
+                        <li><a href="#">PAYMENT</a></li>
+                        <li><a href="#">SHIPPING</a></li>
+                        <li><a href="#">EXCHANGES</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="coppyright">
+                <p>© LEKA E-COMMERCE TEMPLATE. Powered By Kutethemes</p>
+            </div>
+            <div class="payment_methods">
+                <img th:src="@{/assets/images/payment_methods.png}" alt="">
+            </div>
+        </div>
+    </div>
+</footer>
+<a href="#" class="scroll_top" title="Scroll to Top">Scroll</a>
+<script type="text/javascript" th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.fitvids.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/owl.carousel.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.parallax-1.1.3.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/chosen.jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/isotope.pkgd.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/packery-mode.pkgd.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.superslides.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.magnific-popup.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.mCustomScrollbar.concat.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/Modernizr.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.actual.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/blog-masonry.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/custom.js}"></script>
+
+<script>
+    const cateParent = document.querySelectorAll(".cat-parent");
+
+    cateParent.forEach(e => {
+        e.addEventListener("click", (event) => {
+            const target = event.target;
+
+            if (!target.classList.contains("parent-drop") && !target.classList.contains("children-cate")) {
+                window.location.href = `http://localhost:8080/product?cid=${target.getAttribute("cate-id")}`;
+            }
+        })
+    })
+</script>
+</body>
+
+<!-- Mirrored from html.kutethemes.com/leka/html/shop-left-sidebar.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Dec 2023 01:53:00 GMT -->
+</html>

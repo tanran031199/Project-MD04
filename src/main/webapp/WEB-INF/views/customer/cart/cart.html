@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8">
+    <title>Leka - Cart</title>
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/chosen.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/superslides.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/jquery.mCustomScrollbar.css}">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Crimson+Text:400,400italic,600,600italic,700,700italic'
+          rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+<body class="">
+<header class="header">
+    <div class="top-header">
+        <div class="container">
+            <div class="top-header-menu">
+                <a href="#"><i class="fa fa-phone"></i> +84 868.8568</a>
+                <a href="#"><i class="fa fa-clock-o"></i> T2 - T7: 08:00 - 17:00</a>
+                <a href="#"><i class="fa fa-envelope-o"></i> Support@example.com</a>
+            </div>
+            <div class="top-header-right">
+                <ul th:if="${session.customer == null}">
+                    <li><a href="/login"><i class="fa fa-key"></i> ĐĂNG NHẬP</a></li>
+                    <li><a href="/register"><i class="fa fa-user"></i> ĐĂNG KÝ</a></li>
+                </ul>
+
+                <ul th:unless="${session.customer == null}">
+                    <li><a href=""><i class="fa fa-user"></i> <span th:text="${session.customer.userName}"></span></a>
+                    </li>
+                    <li><a href="/logout"> ĐĂNG XUẤT</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-header">
+        <div class="container main-header-inner">
+            <div id="form-search" class="form-search">
+                <form>
+                    <input type="text" placeholder="YOU CAN SEARCH HERE..."/>
+                    <button class="btn-search"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="logo">
+                        <a href="index.html"><img th:src="@{/assets/images/logo.png}" alt=""/></a>
+                    </div>
+                </div>
+                <div class="col-sm-10 main-menu-wapper">
+                    <a href="#" class="mobile-navigation"><i class="fa fa-bars"></i></a>
+                    <nav id="main-menu" class="main-menu">
+                        <ul class="navigation">
+                            <li class="menu-item-has-children">
+                                <a href="/">TRANG CHỦ</a>
+                            </li>
+                            <li class="menu-item-has-children item-mega-menu">
+                                <a href="/product">SẢN PHẨM</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+
+                <div class="mini-cart" xmlns:th="http://www.thymeleaf.org">
+                    <a th:if="${session.cartItemList != null}" class="icon" href="#">Cart <span class="count"
+                                                                                                th:text="${session.cartItemList.size()}"></span></a>
+                    <a th:unless="${session.cartItemList != null}" class="icon" href="#">Cart <span
+                            class="count">0</span></a>
+
+                    <div th:if="${session.cartItemList != null}" class="mini-cart-content">
+                        <ul th:if="${!session.cartItemList.isEmpty()}" class="list-cart-product">
+                            <li th:each="cartItem : ${session.cartItemList}">
+
+                                <div class="product-thumb">
+                                    <a href="#"><img
+                                            th:src="@{|../../../upload/${cartItem.product.images.get(0).fileName}|}"
+                                            alt=""/></a>
+                                </div>
+                                <div class="product-info">
+                                    <h5 class="product-name"><a href="#" th:text="${cartItem.product.productName}"></a>
+                                    </h5>
+                                    <span class="price"
+                                          th:text="${#numbers.formatDecimal(cartItem.unitPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                                    <span class="qty" th:text="'Qty: ' + ${cartItem.quantity}"></span>
+                                    <a th:href="@{/cart-remove-cart-item/{id}(id=${cartItem.cartItemId})}"
+                                       class="remove">remove</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul th:unless="${!session.cartItemList.isEmpty()}" class="list-cart-product">
+                            <li>
+                                <p style="text-align: center; margin-top: 25px;">Chưa có sản phẩm nào trong giỏ hàng của
+                                    bạn</p>
+                            </li>
+                        </ul>
+
+                        <p class="sub-toal-wapper">
+                            <span>SUBTOTAL</span>
+                            <span class="sub-toal"
+                                  th:text="${#numbers.formatDecimal(session.allTotalPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                        </p>
+                        <a href="/cart" class="btn-view-cart">ĐI TỚI GIỎ HÀNG</a>
+                        <a href="#" class="btn-check-out">THANH TOÁN</a>
+                    </div>
+
+
+                    <div th:unless="${session.cartItemList != null}" class="mini-cart-content">
+                        <ul class="list-cart-product">
+                            <li>
+                                <p style="text-align: center; margin-top: 25px;">Chưa có sản phẩm nào trong giỏ hàng của
+                                    bạn</p>
+                            </li>
+                        </ul>
+
+                        <p class="sub-toal-wapper">
+                            <span>SUBTOTAL</span>
+                            <span class="sub-toal">0vnđ</span>
+                        </p>
+                        <a href="/cart" class="btn-view-cart">ĐI TỚI GIỎ HÀNG</a>
+                        <a href="#" class="btn-check-out">THANH TOÁN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="banner banner-cart bg-parallax">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="banner-content text-center">
+            <h2 class="page-title">GIỎ HÀNG</h2>
+            <div class="breadcrumbs">
+                <a href="#">TRANG CHỦ</a>
+                <span>GIỎ HÀNG</span>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="maincontainer">
+    <div class="container">
+        <p th:if="${outOfStock != null}" style="color: crimson;text-align: center;font-weight: 800;font-size: 25px;" th:text="${outOfStock}"></p>
+        <p th:if="${checkoutFail != null}" style="color: crimson;text-align: center;font-weight: 800;font-size: 25px;" th:text="${checkoutFail}"></p>
+        <p th:if="${checkOutSuccess != null}" style="color: green;text-align: center;font-weight: 800;font-size: 25px;" th:text="${checkOutSuccess}"></p>
+
+        <table class="shop_table cart">
+            <thead>
+            <tr>
+                <th class="product-thumbnail">ẢNH</th>
+                <th class="product-name">TÊN SẢN PHẨM</th>
+                <th class="product-quantity">SỐ LƯỢNG CÒN LẠI</th>
+                <th class="product-quantity">SỐ LƯỢNG MUA</th>
+                <th class="product-price">GIÁ</th>
+                <th class="product-subtotal">TỔNG GIÁ SẢN PHẨM</th>
+                <th class="product-remove">&nbsp;</th>
+            </tr>
+            </thead>
+
+            <tbody id="table-body" th:data-id="${cartItemId}" th:cant-minus="${cantMinus}">
+
+            <tr th:each="cartItem : ${session.cartItemList}" th:if="${session.cartItemList != null}" class="cart_item">
+                <td th:if="${!session.cartItemList.isEmpty()}" class="product-thumbnail">
+                    <a href="#">
+                        <img style="width: 250px; height: 200px; object-fit: cover; object-position: center"
+                             th:src="@{|../../../upload/${cartItem.product.images.get(0).fileName}|}" alt=""/>
+                    </a>
+                </td>
+
+                <td th:if="${!session.cartItemList.isEmpty()}" class="product-name">
+                    <a href="#" th:text="${cartItem.product.productName}"></a>
+                </td>
+
+                <td th:if="${!session.cartItemList.isEmpty()}" class="product-quantity">
+                    <a href="#" th:text="${cartItem.product.stock}"></a>
+                </td>
+
+                <td style="display: flex; flex-direction: column; height: 352px; justify-content: center; gap: 10px"
+                    th:if="${!session.cartItemList.isEmpty()}" class="product-quantity">
+                    <a th:href="@{/cart-plus(id=${cartItem.product.productId})}" class="fa fa-angle-up"></a>
+
+
+                    <input type="text" step="1" min="1" name="quantity" th:value="${cartItem.quantity}" title="Qty"
+                           class="input-text qty text" size="4">
+
+                    <a th:href="@{/cart-minus(id=${cartItem.product.productId})}" class="fa fa-angle-down"></a>
+                </td>
+
+                <td th:if="${!session.cartItemList.isEmpty()}" class="product-price">
+                    <span class="amount"
+                          th:text="${#numbers.formatDecimal(cartItem.unitPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                </td>
+
+                <td th:if="${!session.cartItemList.isEmpty()}" class="product-subtotal">
+                    <span class="amount"
+                          th:text="${#numbers.formatDecimal(cartItem.totalPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                </td>
+                <td th:if="${!session.cartItemList.isEmpty()}" class="product-remove">
+                    <a th:href="@{/cart-remove-cart-item(id=${cartItem.cartItemId})}" class="remove"><i
+                            class="fa fa-times"></i></a>
+                </td>
+
+                <td th:unless="${!session.cartItemList.isEmpty()}" colspan="5">
+                    <p style="color: cadetblue; font-weight: bolder; font-size: 25px;">
+                        CHƯA CÓ SẢN PHẨM NÀO TRONG GIỎ HÀNG
+                    </p>
+                </td>
+            </tr>
+
+            <tr th:unless="${session.cartItemList != null}" class="cart_item">
+                <td colspan="5">
+                    <p style="color: cadetblue; font-weight: bolder; font-size: 25px;">
+                        CHƯA CÓ SẢN PHẨM NÀO TRONG GIỎ HÀNG
+                    </p>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="6" class="actions">
+                    <a href="/" class="button pull-left">TIẾP TỤC MUA SẮM</a>
+                    <!--                    <input type="submit" class="button" name="update_cart" value="CẬP NHẬT GIỎ HÀNG">-->
+                    <a th:if="${session.cartItemList != null}" href="/remove-all-cart-item" class="button">XÓA TOÀN BỘ
+                        SẢN PHẨM</a>
+                    <a th:unless="${session.cartItemList != null}" href="" class="button">XÓA TOÀN BỘ SẢN PHẨM</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div class="cart-collaterals">
+            <div class="row">
+                <div style="float: right" class="col-sm-12 col-md-4">
+                    <div class="cart_totals ">
+                        <h2>Cart Totals</h2>
+                        <table>
+                            <tbody>
+                            <tr class="order-total">
+                                <th>TỔNG TIỀN</th>
+                                <td th:if="${session.allTotalPrice != null}">
+                                    <strong><span class="amount"
+                                                  th:text="${#numbers.formatDecimal(session.allTotalPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'">£15.00</span></strong>
+                                </td>
+
+                                <td th:unless="${session.allTotalPrice != null}">
+                                    <strong><span class="amount">0VNĐ</span></strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="wc-proceed-to-checkout">
+                            <a href="/cart-check-out" class="checkout-button button alt wc-forward">ĐẶT MUA</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#"><img th:src="@{/assets/images/logo-footer.png}" alt=""></a>
+            </div>
+            <div class="col-sm-4">
+                <div class="widget">
+                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                    classical Latin literature from 45 BC, making it over
+                </div>
+                <div class="widget widget-social">
+                    <div class="list-social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-google-plus"></i></a>
+                        <a href="#"><i class="fa fa-skype"></i></a>
+                        <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="widget widget-newaletter">
+                    <form>
+                        <input type="text" class="newaletter-email" placeholder="EMAIL FOR NEWSLETTER">
+                        <span><button type="submit" class="newaletter-button"><i class="fa fa-envelope-o"></i></button></span>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">COMPANY</h3>
+                    <ul>
+                        <li><a href="#">ABOUT US</a></li>
+                        <li><a href="#">OFFICES</a></li>
+                        <li><a href="#">STORES</a></li>
+                        <li><a href="#">WORK WITH US</a></li>
+                        <li><a href="#">CONTACT</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">SHOPPING GUIDE</h3>
+                    <ul>
+                        <li><a href="#">HOW TO BUY</a></li>
+                        <li><a href="#">INFOMATION</a></li>
+                        <li><a href="#">PAYMENT</a></li>
+                        <li><a href="#">SHIPPING</a></li>
+                        <li><a href="#">EXCHANGES</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">COMPANY</h3>
+                    <ul>
+                        <li><a href="#">ABOUT US</a></li>
+                        <li><a href="#">OFFICES</a></li>
+                        <li><a href="#">STORES</a></li>
+                        <li><a href="#">WORK WITH US</a></li>
+                        <li><a href="#">CONTACT</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <div class="widget widget_nav_menu">
+                    <h3 class="widget-title">SHOPPING GUIDE</h3>
+                    <ul>
+                        <li><a href="#">HOW TO BUY</a></li>
+                        <li><a href="#">INFOMATION</a></li>
+                        <li><a href="#">PAYMENT</a></li>
+                        <li><a href="#">SHIPPING</a></li>
+                        <li><a href="#">EXCHANGES</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="coppyright">
+                <p>© LEKA E-COMMERCE TEMPLATE. Powered By Kutethemes</p>
+            </div>
+            <div class="payment_methods">
+                <img th:src="@{/assets/images/payment_methods.png}" alt="">
+            </div>
+        </div>
+    </div>
+</footer>
+<a href="#" class="scroll_top" title="Scroll to Top">Scroll</a>
+<script type="text/javascript" th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.fitvids.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/owl.carousel.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.parallax-1.1.3.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/chosen.jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/isotope.pkgd.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/packery-mode.pkgd.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.superslides.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.magnific-popup.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.mCustomScrollbar.concat.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/Modernizr.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/jquery.actual.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/blog-masonry.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/custom.js}"></script>
+
+<script>
+    const tableBody = document.querySelector("#table-body");
+    const dataId = tableBody.getAttribute("data-id");
+
+    if (dataId != null) {
+        if (confirm(tableBody.getAttribute("cant-minus"))) {
+            window.location.href = `http://localhost:8080/cart-remove-cart-item?id=${dataId}`;
+        }
+    }
+</script>
+</body>
+
+<!-- Mirrored from html.kutethemes.com/leka/html/cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Dec 2023 01:53:01 GMT -->
+</html>

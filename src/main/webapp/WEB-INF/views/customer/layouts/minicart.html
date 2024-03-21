@@ -1,0 +1,54 @@
+<div class="mini-cart" xmlns:th="http://www.thymeleaf.org">
+    <a th:if="${session.cartItemList != null}" class="icon" href="#">Cart <span class="count"
+                                                                                th:text="${session.cartItemList.size()}"></span></a>
+    <a th:unless="${session.cartItemList != null}" class="icon" href="#">Cart <span class="count">0</span></a>
+
+    <div th:if="${session.cartItemList != null}" class="mini-cart-content">
+        <ul th:if="${!session.cartItemList.isEmpty()}" class="list-cart-product">
+            <li th:each="cartItem : ${session.cartItemList}">
+
+                <div class="product-thumb">
+                    <a href="#"><img th:src="@{|../../../upload/${cartItem.product.images.get(0).fileName}|}"
+                                     alt=""/></a>
+                </div>
+                <div class="product-info">
+                    <h5 class="product-name"><a href="#" th:text="${cartItem.product.productName}"></a></h5>
+                    <span class="price"
+                          th:text="${#numbers.formatDecimal(cartItem.unitPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+                    <span class="qty" th:text="'Qty: ' + ${cartItem.quantity}"></span>
+                    <a th:href="@{/home-remove-cart-item/{id}(id=${cartItem.cartItemId})}" class="remove">remove</a>
+                </div>
+            </li>
+        </ul>
+
+        <ul th:unless="${!session.cartItemList.isEmpty()}" class="list-cart-product">
+            <li>
+                <p style="text-align: center; margin-top: 25px;">Chưa có sản phẩm nào trong giỏ hàng của bạn</p>
+            </li>
+        </ul>
+
+        <p class="sub-toal-wapper">
+            <span>SUBTOTAL</span>
+            <span class="sub-toal"
+                  th:text="${#numbers.formatDecimal(session.allTotalPrice, 0, 'COMMA', 0, 'POINT')} + 'vnđ'"></span>
+        </p>
+        <a href="/cart" class="btn-view-cart">ĐI TỚI GIỎ HÀNG</a>
+        <a href="#" class="btn-check-out">THANH TOÁN</a>
+    </div>
+
+
+    <div th:unless="${session.cartItemList != null}" class="mini-cart-content">
+        <ul class="list-cart-product">
+            <li>
+                <p style="text-align: center; margin-top: 25px;">Chưa có sản phẩm nào trong giỏ hàng của bạn</p>
+            </li>
+        </ul>
+
+        <p class="sub-toal-wapper">
+            <span>SUBTOTAL</span>
+            <span class="sub-toal">0vnđ</span>
+        </p>
+        <a href="/cart" class="btn-view-cart">ĐI TỚI GIỎ HÀNG</a>
+        <a href="#" class="btn-check-out">THANH TOÁN</a>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+Template Name: Enigma - HTML Admin Dashboard Template
+Author: Left4code
+Website: http://www.left4code.com/
+Contact: muhammadrizki@left4code.com
+Purchase: https://themeforest.net/user/left4code/portfolio
+Renew Support: https://themeforest.net/user/left4code/portfolio
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<html lang="en" class="light" xmlns:th="http://www.thymeleaf.org">
+<!-- BEGIN: Head -->
+
+<!-- Mirrored from enigma-html.vercel.app/login-light-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 23 Nov 2023 06:43:30 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/dist/images/logo.svg}" rel="shortcut icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="Enigma admin is super flexible, powerful, clean & modern responsive tailwind admin template with unlimited possibilities.">
+    <meta name="keywords"
+          content="admin template, Enigma Admin Template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="LEFT4CODE">
+    <title>Login - Midone - Tailwind HTML Admin Template</title>
+    <!-- BEGIN: CSS Assets-->
+    <link rel="stylesheet" th:href="@{/dist/css/app.css}"/>
+    <!-- END: CSS Assets-->
+</head>
+<!-- END: Head -->
+<body class="login">
+<div class="container sm:px-10">
+    <div class="block xl:grid grid-cols-2 gap-4">
+        <!-- BEGIN: Login Info -->
+        <div class="hidden xl:flex flex-col min-h-screen">
+            <a href="#" class="-intro-x flex items-center pt-5">
+                <img alt="Midone - HTML Admin Template" class="w-6" th:src="@{/dist/images/logo.svg}">
+                <span class="text-white text-lg ml-3"> Enigma </span>
+            </a>
+            <div class="my-auto">
+                <img alt="Midone - HTML Admin Template" class="-intro-x w-1/2 -mt-16"
+                     th:src="@{/dist/images/illustration.svg}">
+                <div class="-intro-x text-white font-medium text-4xl leading-tight mt-10">
+                    Thêm một vài cú nhấp chuột
+                    <br>
+                    để Đăng nhập vào tài khoản của bạn
+                </div>
+                <div class="-intro-x mt-5 text-lg text-white text-opacity-70 dark:text-slate-400">Quản lý tất cả các tài
+                    khoản thương mại điện tử của bạn ở một nơi
+                </div>
+            </div>
+        </div>
+        <!-- END: Login Info -->
+        <!-- BEGIN: Login Form -->
+        <div class="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
+            <form action="/login" th:object="${user}" method="POST"
+                  class="my-auto mx-auto xl:ml-20 bg-white dark:bg-darkmode-600 xl:bg-transparent px-5 sm:px-8 py-8 xl:p-0 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto">
+                <h2 class="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left">
+                    Đăng nhập
+                </h2>
+
+                <span th:text="${notExistsUserMsg}" class="inline-block text-red-500 pl-1 mt-1.5"></span>
+                <span th:text="${forgotLogin}" class="inline-block text-red-500 pl-1 mt-1.5"></span>
+
+                <div class="intro-x mt-3 pr-16">
+                    <input th:field="*{email}" type="text" class="intro-x login__input form-control py-3 px-4 block"
+                           placeholder="Email">
+                    <span th:errors="*{email}" class="text-red-500 pl-1"></span>
+
+                    <input th:field="*{password}" type="password"
+                           class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password">
+                    <span th:errors="*{password}" class="text-red-500 pl-1"></span>
+                </div>
+                <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
+                    <button type="submit" class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top">Đăng nhập
+                    </button>
+                    <a href="/register" type="submit"
+                       class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top">Đăng ký
+                    </a>
+                </div>
+            </form>
+        </div>
+        <!-- END: Login Form -->
+    </div>
+</div>
+
+<script th:src="@{/dist/js/app.js}"></script>
+<!-- END: JS Assets-->
+</body>
+
+<!-- Mirrored from enigma-html.vercel.app/login-light-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 23 Nov 2023 06:43:30 GMT -->
+</html>
